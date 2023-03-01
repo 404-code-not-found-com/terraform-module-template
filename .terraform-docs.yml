@@ -1,0 +1,6 @@
+sort:
+  enabled: true
+  by: required
+
+settings:
+  anchor: false

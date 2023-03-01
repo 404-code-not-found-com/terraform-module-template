@@ -1,0 +1,18 @@
+# https://taskfile.dev
+
+version: "3"
+
+dotenv: [".envrc"]
+
+tasks:
+  pre:
+    cmds:
+      - pre-commit run -a
+  push:
+    cmds:
+      - git push
+      - git tag -s {{.CLI_ARGS}} -m "{{.CLI_ARGS}}"
+      - git push --tags
+  hog:
+    cmds:
+      - trufflehog git file://. --since-commit HEAD --only-verified --fail

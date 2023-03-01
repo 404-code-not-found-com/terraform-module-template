@@ -1,0 +1,28 @@
+# Setup env using https://direnv.net/
+
+# Do we want to combine env setup with data from parent directories?
+# source_up
+
+# Do we need to watch any files for changes and reload the env?
+# watch_file .tmp/consul.json .tmp/nomad.txt .tmp/vault.json
+
+# Add to the path
+# PATH_add ../bin
+
+# Cloud Auth
+# export GOOGLE_OAUTH_ACCESS_TOKEN=$(gcloud auth application-default print-access-token)
+# export AWS_PROFILE=demo-01
+
+# Process a template file for variable substitution
+# op inject --cache -f -i ${HOME}/.terraform.d/credentials-personal.tpl -o ${HOME}/.terraform.d/credentials.tfrc.json
+
+# Source another env file
+# source_env $(dirname $PWD)/$(../bin/set-env.sh)
+
+# Exports
+# export TFE_TOKEN=$(op read --cache "op://Vault/Item/Key")
+
+# Terraform Variable exports
+# export TF_VAR_okta_token=$(op read --cache "op://Vault/Item/Section/Key")
+# export TF_VAR_okta_client_id=$(op read --cache "op://Vault/Item/Section/Key")
+# export TF_VAR_okta_client_secret=$(op read --cache "op://Vault/Item/Section/Key")
