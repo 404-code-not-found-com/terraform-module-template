@@ -52,7 +52,8 @@ commit process.
     - `brew install terrascan`
   - [TFLint](https://github.com/terraform-linters/tflint)
     - `brew install tflint`
-  - [TFSec](https://github.com/liamg/tfsec)
+  - [TFSec](https://tfsec.dev)
+    - `brew install tfsec`
 
 ### Terraform Maintenance tools
 
