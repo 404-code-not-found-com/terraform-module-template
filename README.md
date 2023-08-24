@@ -29,7 +29,7 @@ I use a wide array of tools to make things easier for me.
   repo for committed secrets 😱.
   - `brew install trufflesecurity/trufflehog/trufflehog`
 
-### Tools needed for the Pre-commit hooks that I use:
+### Tools needed for the Pre-commit hooks that I use
 
 All of these tools can be used standalone, but I use them as part of the git
 commit process.
@@ -54,6 +54,25 @@ commit process.
     - `brew install tflint`
   - [TFSec](https://tfsec.dev)
     - `brew install tfsec`
+
+### Miscellaneous tools
+
+- [tfvars](https://github.com/shihanng/tfvar): This tool helps you manage
+  Terraform variables. It allows you to store Terraform variables in a central
+  location, and it also provides a way to encrypt Terraform variables.
+- [inframap](https://github.com/cycloidio/inframap): Inframap is a tool that can
+  be used to visualize your Terraform infrastructure. It reads your tfstate or
+  HCL to generate a graph specific for each provider, showing only the resources
+  that are most important/relevant.
+- [driftctl](https://github.com/cloudskiff/driftctl): driftctl detects
+  infrastructure drift by comparing actual resources with Terraform
+  configuration, identifying changes or drift in attributes.
+- [Terraspace](https://github.com/boltops-tools/terraspace): Terraspace is a
+  framework that simplifies the development and deployment of Terraform
+  infrastructure, offering automated module generation and integrated testing.
+- [Terraform Compliance](https://github.com/terraform-compliance/cli): Terraform
+  Compliance is a security and compliance scanner for Terraform code, allowing
+  you to define and verify policies as code.
 
 ### Terraform Maintenance tools
 
