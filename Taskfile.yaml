@@ -4,15 +4,34 @@ version: "3"
 
 dotenv: [".envrc"]
 
+vars:
+  CURRENT_DATE:
+    sh: date +"%Y-%m-%dT%H:%M:%S%Z"
+
 tasks:
+  default:
+    cmds:
+      - git add .
+      - git commit -m "{{.CURRENT_DATE}}"
+      - git push
+    silent: true
+
+  hog:
+    cmds:
+      - trufflehog git file://. --since-commit HEAD --only-verified --fail
+
   pre:
     cmds:
       - pre-commit run -a
+
   push:
     cmds:
       - git push
       - git tag -s {{.CLI_ARGS}} -m "{{.CLI_ARGS}}"
       - git push --tags
-  hog:
+
+  tag:
     cmds:
-      - trufflehog git file://. --since-commit HEAD --only-verified --fail
+      - git push
+      - git tag -s {{.CLI_ARGS}} -m "{{.CLI_ARGS}}"
+      - git push --tags
