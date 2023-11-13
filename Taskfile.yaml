@@ -24,12 +24,6 @@ tasks:
     cmds:
       - pre-commit run -a
 
-  push:
-    cmds:
-      - git push
-      - git tag -s {{.CLI_ARGS}} -m "{{.CLI_ARGS}}"
-      - git push --tags
-
   tag:
     cmds:
       - git push
