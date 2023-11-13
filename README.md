@@ -28,6 +28,10 @@ I use a wide array of tools to make things easier for me.
 - [trufflehog](https://github.com/trufflesecurity/trufflehog): Scans your git
   repo for committed secrets 😱.
   - `brew install trufflesecurity/trufflehog/trufflehog`
+- [autotag](https://github.com/pantheon-systems/autotag): Automatically creates
+  git tags based on the commit message. Used to create semantic version tags in
+  GitHub Actions pipeline. (Not installed locally, but you could)
+  - `brew install pantheon-systems/autotag/autotag`
 
 ### Tools needed for the Pre-commit hooks that I use
 
@@ -99,8 +103,6 @@ options.
 
 `TFLint`: Review `.tflint.hcl`
 
-`TFSec`: Review `.tfsec.yml`
-
 `Task`: Review `Taskfile.yaml` and or remove tasks.
 
 `Terraform`: Rename `terraform.tfvars.example` to `terraform.tfvars` and update.
@@ -114,13 +116,14 @@ The following two lines specify where the `terraform-docs` dynamic content will
 be placed.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
 ## Requirements
 
-| Name | Version |
-|------|---------|
-| terraform | ~> 1.0 |
-| google | ~>4.55 |
-| hcp | ~>0.54 |
+| Name      | Version |
+| --------- | ------- |
+| terraform | ~> 1.0  |
+| google    | ~>4.55  |
+| hcp       | ~>0.54  |
 
 ## Providers
 
@@ -141,4 +144,5 @@ No inputs.
 ## Outputs
 
 No outputs.
+
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
