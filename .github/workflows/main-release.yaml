@@ -1,4 +1,4 @@
-name: Module release
+name: Tag and Release
 on:
   push:
     branches:
@@ -10,7 +10,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  release-module:
+  tag-release:
     name: Release
     runs-on: ubuntu-latest
     steps:
@@ -30,7 +30,7 @@ jobs:
         run: |
           set -eou pipefail
 
-          new_version=$(autotag -vn)
+          new_version=$(autotag -vn --scheme=conventional)
           gh release create v"${new_version}" --target main --title "v${new_version}" --generate-notes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
