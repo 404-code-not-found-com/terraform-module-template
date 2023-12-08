@@ -90,6 +90,68 @@ Here are a couple of tools I use to help with managing Terraform versions.
   constraints in your terraform code for core, providers and modules.
   - `brew install tfupdate`
 
+### Code Editor
+
+I use [Visual Studio Code](https://code.visualstudio.com/) as my code editor. I
+have included my settings and extensions in the .vscode directory, so they
+should be automatically installed when you open the project. They are also
+listed below.
+
+#### Extensions
+
+I use the following extensions for VS Code.
+
+- [HashiCorp HCL](https://marketplace.visualstudio.com/items?itemName=HashiCorp.HCL)
+- [HashiCorp Sentinel](https://marketplace.visualstudio.com/items?itemName=HashiCorp.sentinel)
+- [HashiCorp Terraform](https://marketplace.visualstudio.com/items?itemName=HashiCorp.terraform)
+- [indent-rainbow](https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow)
+- [Indented Block Highlighting](https://marketplace.visualstudio.com/items?itemName=byi8220.indented-block-highlighting)
+- [Multiple cursor case preserve](https://marketplace.visualstudio.com/items?itemName=Cardinal90.multi-cursor-case-preserve)
+
+#### Settings
+
+I use the following settings for VS Code.
+
+```json
+{
+  "[sentinel]": {
+    "editor.defaultFormatter": "hashicorp.terraform"
+  },
+  "[terraform]": {
+    "editor.defaultFormatter": "hashicorp.terraform"
+  },
+  "[tfvars]": {
+    "editor.defaultFormatter": "hashicorp.terraform"
+  },
+  "editor.bracketPairColorization.enabled": true,
+  "editor.formatOnSave": true,
+  "editor.rulers": [
+    {
+      "color": "#A5FF90",
+      "column": 80
+    },
+    {
+      "color": "#FF628C",
+      "column": 100
+    }
+  ],
+  "editor.tabCompletion": "on",
+  "editor.tabSize": 2,
+  "files.associations": {
+    "*.hcl": "terraform",
+    "*.nomad": "terraform",
+    "*.policy": "sentinel"
+  },
+  "terraform.indexing": {
+    "delay": 500,
+    "enabled": false,
+    "exclude": [".terraform/**/*", "**/.terraform/**/*"],
+    "liveIndexing": false
+  },
+  "terraform.languageServer.enable": true
+}
+```
+
 ## Example config files
 
 I've included example config files for some of the tools.
@@ -116,14 +178,13 @@ The following two lines specify where the `terraform-docs` dynamic content will
 be placed.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-
 ## Requirements
 
-| Name      | Version |
-| --------- | ------- |
-| terraform | ~> 1.0  |
-| google    | ~>4.55  |
-| hcp       | ~>0.54  |
+| Name | Version |
+|------|---------|
+| terraform | ~> 1.0 |
+| google | ~>4.55 |
+| hcp | ~>0.54 |
 
 ## Providers
 
@@ -144,5 +205,4 @@ No inputs.
 ## Outputs
 
 No outputs.
-
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
