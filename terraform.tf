@@ -1,7 +1,8 @@
 ###############################################################################
 # terraform.tf
 #
-# Terraform and Provider blocks
+# Contains a single terraform block which defines your required_version and
+# required_providers.
 ###############################################################################
 
 terraform {
@@ -16,20 +17,4 @@ terraform {
       version = "~>0.54"
     }
   }
-}
-
-provider "google" {
-  # Configuration options
-  # Environment variables needed for auth
-  # GOOGLE_OAUTH_ACCESS_TOKEN="..."
-  # GOOGLE_PROJECT="..."
-  # GOOGLE_REGION="..."
-  # GOOGLE_ZONE="..."
-}
-
-provider "hcp" {
-  # Configuration options
-  # Environment variables needed for auth
-  # HCP_CLIENT_ID="..."
-  # HCP_CLIENT_SECRET="..."
 }

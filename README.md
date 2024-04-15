@@ -1,7 +1,9 @@
 # Template repo for Terraform modules
 
 This repository contains my template for creating Terraform modules, yes even my
-root modules.
+root modules. This template is based on the best practices I have learned and
+the
+[HashiCorp style guide](https://developer.hashicorp.com/terraform/language/style).
 
 ## Tools that I use
 
@@ -49,13 +51,14 @@ commit process.
   JSON processor. required for `terraform_validate` with
   `--retry-once-with-cleanup` flag, and for `infracost_breakdown` hook.
   - `brew install jq`
+- [TFLint](https://github.com/terraform-linters/tflint): A Terraform linter that
+  checks for best practices and errors in your Terraform code.
+  - `brew install tflint`
 - One or more of these terraform security scanning tools
   - [checkov](https://github.com/bridgecrewio/checkov)
     - `brew install checkov`
   - [terrascan](https://github.com/tenable/terrascan)
     - `brew install terrascan`
-  - [TFLint](https://github.com/terraform-linters/tflint)
-    - `brew install tflint`
   - [TFSec](https://tfsec.dev)
     - `brew install tfsec`
 
