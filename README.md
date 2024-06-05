@@ -92,6 +92,10 @@ Here are a couple of tools I use to help with managing Terraform versions.
 - [tfupdate](https://github.com/minamijoyo/tfupdate): Used to update the version
   constraints in your terraform code for core, providers and modules.
   - `brew install tfupdate`
+- [TFTUI](https://github.com/idoavrah/terraform-tui): TFTUI is a powerful
+  textual UI that empowers users to effortlessly view and interact with their
+  Terraform state.
+  - `brew install idoavrah/tap/tftui`
 
 ### Code Editor
 
@@ -181,13 +185,14 @@ The following two lines specify where the `terraform-docs` dynamic content will
 be placed.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
 ## Requirements
 
-| Name | Version |
-|------|---------|
-| terraform | ~> 1.0 |
-| google | ~>4.55 |
-| hcp | ~>0.54 |
+| Name      | Version |
+| --------- | ------- |
+| terraform | ~> 1.0  |
+| google    | ~>4.55  |
+| hcp       | ~>0.54  |
 
 ## Providers
 
@@ -208,4 +213,5 @@ No inputs.
 ## Outputs
 
 No outputs.
+
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

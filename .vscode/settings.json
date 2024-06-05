@@ -33,5 +33,7 @@
     "exclude": [".terraform/**/*", "**/.terraform/**/*"],
     "liveIndexing": false
   },
-  "terraform.languageServer.enable": true
+  "terraform.languageServer.enable": true,
+  "editor.guides.bracketPairs": "active",
+  "files.trimTrailingWhitespace": true
 }

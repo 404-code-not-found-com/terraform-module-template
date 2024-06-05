@@ -7,8 +7,6 @@
     "hashicorp.hcl",
     "hashicorp.sentinel",
     "hashicorp.terraform",
-    "oderwat.indent-rainbow",
-    "byi8220.indented-block-highlighting",
     "cardinal90.multi-cursor-case-preserve"
   ],
   // List of extensions recommended by VS Code that should not be recommended for users of this workspace.
