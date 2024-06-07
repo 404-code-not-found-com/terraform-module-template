@@ -12,3 +12,4 @@ updates:
       - methridge
     reviewers:
       - methridge
+    open-pull-requests-limit: 10
