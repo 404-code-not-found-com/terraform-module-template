@@ -4,5 +4,11 @@
   "labels": ["dependencies"],
   "assignees": ["methridge"],
   "prHourlyLimit": 10,
-  "reviewers": ["methridge"]
+  "reviewers": ["methridge"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    }
+  ]
 }
