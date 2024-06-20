@@ -1,15 +1,15 @@
 # yaml-language-server: $schema=https://json.schemastore.org/dependabot-2.0.json
 
-version: 2
-updates:
-  - package-ecosystem: "terraform"
-    directory: "/"
-    schedule:
-      interval: "daily"
-      time: "03:00"
-      timezone: "America/Denver"
-    assignees:
-      - methridge
-    reviewers:
-      - methridge
-    open-pull-requests-limit: 10
+# version: 2
+# updates:
+#   - package-ecosystem: "terraform"
+#     directory: "/"
+#     schedule:
+#       interval: "daily"
+#       time: "03:00"
+#       timezone: "America/Denver"
+#     assignees:
+#       - methridge
+#     reviewers:
+#       - methridge
+#     open-pull-requests-limit: 10
