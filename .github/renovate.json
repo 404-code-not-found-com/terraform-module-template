@@ -7,8 +7,12 @@
   "reviewers": ["methridge"],
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "automerge": true
+      "matchPackagePrefixes": ["terraform"],
+      "matchUpdateTypes": ["major"]
+    },
+    {
+      "matchPackageNames": ["tflint"],
+      "matchUpdateTypes": ["major", "minor", "patch"]
     }
   ]
 }
