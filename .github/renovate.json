@@ -7,11 +7,11 @@
   "reviewers": ["methridge"],
   "packageRules": [
     {
-      "matchPackagePrefixes": ["terraform"],
+      "matchPackagePrefixes": ["hashicorp/"],
       "matchUpdateTypes": ["major"]
     },
     {
-      "matchPackageNames": ["tflint"],
+      "matchPackagePrefixes": ["terraform-linters/"],
       "matchUpdateTypes": ["major", "minor", "patch"]
     }
   ]
