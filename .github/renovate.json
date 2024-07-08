@@ -8,11 +8,13 @@
   "packageRules": [
     {
       "matchPackagePrefixes": ["hashicorp/"],
-      "matchUpdateTypes": ["major"]
+      "matchUpdateTypes": ["minor", "patch"],
+      "enabled": false
     },
     {
       "matchPackagePrefixes": ["terraform-linters/"],
-      "matchUpdateTypes": ["major", "minor", "patch"]
+      "matchUpdateTypes": ["minor", "patch"],
+      "enabled": false
     }
   ]
 }
