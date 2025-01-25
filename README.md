@@ -111,8 +111,6 @@ I use the following extensions for VS Code.
 - [HashiCorp HCL](https://marketplace.visualstudio.com/items?itemName=HashiCorp.HCL)
 - [HashiCorp Sentinel](https://marketplace.visualstudio.com/items?itemName=HashiCorp.sentinel)
 - [HashiCorp Terraform](https://marketplace.visualstudio.com/items?itemName=HashiCorp.terraform)
-- [indent-rainbow](https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow)
-- [Indented Block Highlighting](https://marketplace.visualstudio.com/items?itemName=byi8220.indented-block-highlighting)
 - [Multiple cursor case preserve](https://marketplace.visualstudio.com/items?itemName=Cardinal90.multi-cursor-case-preserve)
 
 #### Settings
@@ -145,15 +143,7 @@ I use the following settings for VS Code.
   "editor.tabCompletion": "on",
   "editor.tabSize": 2,
   "files.associations": {
-    "*.hcl": "terraform",
-    "*.nomad": "terraform",
     "*.policy": "sentinel"
-  },
-  "terraform.indexing": {
-    "delay": 500,
-    "enabled": false,
-    "exclude": [".terraform/**/*", "**/.terraform/**/*"],
-    "liveIndexing": false
   },
   "terraform.languageServer.enable": true
 }
@@ -184,15 +174,14 @@ description.
 The following two lines specify where the `terraform-docs` dynamic content will
 be placed.
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
-| Name      | Version |
-| --------- | ------- |
-| terraform | ~> 1.0  |
-| google    | ~>4.55  |
-| hcp       | ~>0.54  |
+| Name | Version |
+|------|---------|
+| terraform | ~> 1.0 |
+| google | ~> 6.0 |
+| hcp | ~> 0.94 |
 
 ## Providers
 
@@ -213,5 +202,4 @@ No inputs.
 ## Outputs
 
 No outputs.
-
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->

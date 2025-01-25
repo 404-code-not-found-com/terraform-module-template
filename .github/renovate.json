@@ -13,7 +13,7 @@
     },
     {
       "matchPackagePrefixes": ["terraform-linters/"],
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchUpdateTypes": ["patch"],
       "enabled": false
     }
   ]
