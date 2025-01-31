@@ -15,6 +15,7 @@ repos:
     hooks:
       - id: check-merge-conflict
       - id: end-of-file-fixer
+      - id: no-commit-to-branch
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: v1.97.0
     hooks:
