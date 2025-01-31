@@ -1,7 +1,4 @@
 {
-  "[sentinel]": {
-    "editor.defaultFormatter": "hashicorp.terraform"
-  },
   "[terraform]": {
     "editor.defaultFormatter": "hashicorp.terraform"
   },
@@ -10,6 +7,7 @@
   },
   "editor.bracketPairColorization.enabled": true,
   "editor.formatOnSave": true,
+  "editor.guides.bracketPairs": "active",
   "editor.rulers": [
     {
       "color": "#A5FF90",
@@ -23,9 +21,8 @@
   "editor.tabCompletion": "on",
   "editor.tabSize": 2,
   "files.associations": {
-    "*.policy": "sentinel"
+    "*.sh.tmpl": "shellscript"
   },
-  "terraform.languageServer.enable": true,
-  "editor.guides.bracketPairs": "active",
-  "files.trimTrailingWhitespace": true
+  "files.trimTrailingWhitespace": true,
+  "terraform.languageServer.enable": true
 }
