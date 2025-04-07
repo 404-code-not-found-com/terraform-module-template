@@ -1,4 +1,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/pre-commit-config.json
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
 
 repos:
   - repo: local
