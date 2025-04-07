@@ -180,8 +180,6 @@ be placed.
 | Name | Version |
 |------|---------|
 | terraform | ~> 1.0 |
-| google | ~> 6.0 |
-| hcp | ~> 0.94 |
 
 ## Providers
 
