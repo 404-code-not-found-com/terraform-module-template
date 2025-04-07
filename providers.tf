@@ -1,21 +1,34 @@
 ###############################################################################
 # providers.tf
 #
-# Contains all provider blocks and configuration.
+# Contains all required_providers terraform blocks and stanzas.
+# Contains provider configuration.
 ###############################################################################
 
-provider "google" {
-  # Configuration options
-  # Environment variables needed for auth
-  # GOOGLE_OAUTH_ACCESS_TOKEN="..."
-  # GOOGLE_PROJECT="..."
-  # GOOGLE_REGION="..."
-  # GOOGLE_ZONE="..."
-}
+## Google Cloud Platform
+# terraform {
+#   required_providers {
+#     google = {
+#       source = "hashicorp/google"
+#       version = "6.28.0"
+#     }
+#   }
+# }
 
-provider "hcp" {
-  # Configuration options
-  # Environment variables needed for auth
-  # HCP_CLIENT_ID="..."
-  # HCP_CLIENT_SECRET="..."
-}
+# provider "google" {
+#   # Configuration options
+# }
+
+## HashiCorp Cloud Platform
+# terraform {
+#   required_providers {
+#     hcp = {
+#       source  = "hashicorp/hcp"
+#       version = "0.104.0"
+#     }
+#   }
+# }
+
+# provider "hcp" {
+#   # Configuration options
+# }
