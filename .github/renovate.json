@@ -10,11 +10,6 @@
       "matchPackagePrefixes": ["hashicorp/"],
       "matchUpdateTypes": ["minor", "patch"],
       "enabled": false
-    },
-    {
-      "matchPackagePrefixes": ["terraform-linters/"],
-      "matchUpdateTypes": ["patch"],
-      "enabled": false
     }
   ]
 }
