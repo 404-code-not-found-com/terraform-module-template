@@ -5,10 +5,12 @@
 
 ### Chore
 
+* update CHANGELOG.md
 * Adding CHANGELOG
 
 ### Ci
 
+* Taskfile updates
 * Taskfile update
 * Taskfile updates
 * Updating Taskfile
