@@ -23,6 +23,7 @@ tasks:
       - |
         git-chglog --next-tag v$(autotag -vn --scheme=conventional) -o CHANGELOG.md
         git add CHANGELOG.md
+        pre-commit run -a
         git commit -m 'chore: update CHANGELOG.md'
 
   pre:
