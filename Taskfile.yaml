@@ -22,8 +22,8 @@ tasks:
     cmds:
       - |
         git-chglog --next-tag v$(autotag -vn --scheme=conventional) -o CHANGELOG.md
+        pre-commit run --files CHANGELOG.md end-of-file-fixer || true
         git add CHANGELOG.md
-        pre-commit run end-of-file-fixer || true
         git commit -m 'chore: update CHANGELOG.md'
 
   pre:
