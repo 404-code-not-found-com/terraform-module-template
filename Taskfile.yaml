@@ -18,6 +18,14 @@ tasks:
     cmds:
       - trufflehog git file://. --since-commit HEAD --only-verified --fail
 
+  log:
+    cmds:
+      - |
+        git-chglog --next-tag v$(autotag -vn --scheme=conventional) -o CHANGELOG.md
+        pre-commit run end-of-file-fixer --files CHANGELOG.md || true
+        git add CHANGELOG.md
+        git commit -m 'chore: update CHANGELOG.md'
+
   pre:
     cmds:
       - pre-commit autoupdate
