@@ -3,11 +3,9 @@
 
 version: "3"
 
-dotenv: [".envrc"]
-
 vars:
   CURRENT_DATE:
-    sh: date +"%Y-%m-%dT%H:%M:%S%Z"
+    sh: date +"%Y-%m-%dT%H-%M-%S%Z"
 
 tasks:
   default:
@@ -26,20 +24,54 @@ tasks:
         git add CHANGELOG.md
         git commit -m 'chore: update CHANGELOG.md'
 
+  mr:
+    desc: "Create Merge Request and Merge"
+    cmds:
+      - glab mr create --fill --fill-commit-body --yes
+      - sleep 2
+      - glab mr merge -d
+
   pre:
     cmds:
       - pre-commit autoupdate
+      - pre-commit gc
       - pre-commit run -a
 
   push:
     cmds:
+      - |
+        if [[ $(git rev-parse --abbrev-ref HEAD) == "main" ]]; then
+          git switch --create {{.CURRENT_DATE}}
+        fi
       - git add .
       - git commit -m "{{.CURRENT_DATE}}"
       - git push
-    silent: true
 
-  tag:
+  pr:
+    cmds:
+      - gh pr create --fill-verbose
+      - sleep 2
+      - gh pr merge --delete-branch --merge
+
+  radar:
+    cmds:
+      - vault-radar scan git pre-commit
+
+  tag:*:*:
+    desc: "Create a signed tag with a message"
+    vars:
+      TAG_NAME: "{{index .MATCH0}}"
+      TAG_MESSAGE: "{{index .MATCH1}}"
     cmds:
       - git push
-      - git tag -s {{.CLI_ARGS}} -m "{{.CLI_ARGS}}"
+      - git tag -s {{.TAG_NAME}} -m "{{.TAG_MESSAGE}}"
+      - git push --tags
+
+  tag:*:
+    desc: "Create a signed tag with tag as message"
+    vars:
+      TAG_NAME: "{{index .MATCH0}}"
+    cmds:
+      - git push
+      - git tag -s {{.TAG_NAME}} -m "{{.TAG_NAME}}"
       - git push --tags
