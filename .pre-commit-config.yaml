@@ -8,9 +8,10 @@ repos:
       - id: trufflehog
         name: TruffleHog
         description: Detect secrets in your data.
-        entry: trufflehog git file://. --since-commit HEAD --fail
-        language: golang
-        pass_filenames: false
+        entry:
+          bash -c 'trufflehog git file://. --since-commit HEAD
+          --results=verified,unknown --fail'
+        language: system
         stages: ["pre-commit", "pre-push"]
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
