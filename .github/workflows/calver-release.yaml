@@ -28,7 +28,7 @@ jobs:
           # YYYY.MMDD.HHMM format in UTC
           DATE=$(date -u +"%Y.%m%d.%H%M")
           echo "Generated CalVer Tag: $DATE"
-          echo "version=$DATE" >> $GITHUB_OUTPUT
+          echo "version=$DATE" >> "$GITHUB_OUTPUT"
 
       - name: Tag and Release
         run: |

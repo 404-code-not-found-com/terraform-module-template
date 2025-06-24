@@ -28,7 +28,7 @@ jobs:
           curl -sL https://git.io/autotag-install | sudo sh -s -- -b /usr/local/bin
           SEMVER=$(autotag -vn --scheme=conventional)
           echo "Generated SemVer Tag: $SEMVER"
-          echo "version=$SEMVER" >> $GITHUB_OUTPUT
+          echo "version=$SEMVER" >> "$GITHUB_OUTPUT"
 
       - name: Tag and Release
         run: |
