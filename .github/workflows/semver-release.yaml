@@ -1,0 +1,41 @@
+name: SemVer Release
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  checks: write
+  contents: write
+  id-token: write
+  statuses: write
+
+jobs:
+  semver-tag:
+    name: SemVer Release Tagging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Generate Semantic Version for Tagging
+        id: semver
+        run: |
+          curl -sL https://git.io/autotag-install | sudo sh -s -- -b /usr/local/bin
+          SEMVER=$(autotag -vn --scheme=conventional)
+          echo "Generated SemVer Tag: $SEMVER"
+          echo "version=$SEMVER" >> $GITHUB_OUTPUT
+
+      - name: Tag and Release
+        run: |
+          set -eou pipefail
+          gh release create "${{ steps.semver.outputs.version }}" \
+            --target main \
+            --title "Release ${{ steps.semver.outputs.version }}" \
+            --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
