@@ -1,0 +1,41 @@
+name: CalVer Release
+on:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+
+permissions:
+  checks: write
+  contents: write
+  id-token: write
+  statuses: write
+
+jobs:
+  calver-tag:
+    name: CalVer Release Tagging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Generate Calendar Version for Tagging
+        id: calver
+        run: |
+          # YYYY.MMDD.HHMM format in UTC
+          DATE=$(date -u +"%Y.%m%d.%H%M")
+          echo "Generated CalVer Tag: $DATE"
+          echo "version=$DATE" >> "$GITHUB_OUTPUT"
+
+      - name: Tag and Release
+        run: |
+          set -eou pipefail
+          gh release create "${{ steps.calver.outputs.version }}" \
+            --target main \
+            --title "Release ${{ steps.calver.outputs.version }}" \
+            --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
