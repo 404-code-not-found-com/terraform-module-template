@@ -6,23 +6,28 @@ version: "3"
 vars:
   CURRENT_DATE:
     sh: date +"%Y-%m-%dT%H-%M-%S%Z"
+  CAL_VER_DATE:
+    sh: date -u +"%Y.%m%d.%H%M"
 
 tasks:
   default:
+    desc: Show available tasks
     cmds:
-      - task: pre
+      - task --list-all
+
+  help:
+    desc: Show this help message
+    cmds:
+      - task --list-all
 
   hog:
     cmds:
-      - trufflehog git file://. --since-commit HEAD --only-verified --fail
-
-  log:
-    cmds:
       - |
-        git-chglog --next-tag v$(autotag -vn --scheme=conventional) -o CHANGELOG.md
-        pre-commit run end-of-file-fixer --files CHANGELOG.md || true
-        git add CHANGELOG.md
-        git commit -m 'chore: update CHANGELOG.md'
+        trufflehog git file://. \
+          --since-commit HEAD \
+          --only-verified \
+          --fail \
+          --no-update
 
   mr:
     desc: "Create Merge Request and Merge"
@@ -60,8 +65,8 @@ tasks:
   tag:*:*:
     desc: "Create a signed tag with a message"
     vars:
-      TAG_NAME: "{{index .MATCH0}}"
-      TAG_MESSAGE: "{{index .MATCH1}}"
+      TAG_NAME: "{{index .MATCH 0}}"
+      TAG_MESSAGE: "{{index .MATCH 1}}"
     cmds:
       - git push
       - git tag -s {{.TAG_NAME}} -m "{{.TAG_MESSAGE}}"
@@ -70,8 +75,36 @@ tasks:
   tag:*:
     desc: "Create a signed tag with tag as message"
     vars:
-      TAG_NAME: "{{index .MATCH0}}"
+      TAG_NAME: "{{index .MATCH 0}}"
     cmds:
       - git push
       - git tag -s {{.TAG_NAME}} -m "{{.TAG_NAME}}"
+      - git push --tags
+
+  tag0:
+    desc: "Create first tag on repo"
+    cmds:
+      - git push
+      - git tag -s v0.0.0 -m "v0.0.0 - First Tag 🤠"
+      - git push --tags
+
+  tagauto:
+    desc: "Create a signed tag with auto semantic versioning"
+    cmds:
+      - git push
+      - |
+        LAST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+        if [[ -z "$LAST_TAG" ]]; then
+          git tag -s v0.0.0 -m "v0.0.0 - First Tag 🤠"
+        else
+          NEW_TAG="v$(autotag -vn --scheme=conventional)"
+          git tag -s "$NEW_TAG" -m "$NEW_TAG"
+        fi
+      - git push --tags
+
+  tagcal:
+    desc: "Create a signed tag with calendar versioning"
+    cmds:
+      - git push
+      - git tag -s v{{.CAL_VER_DATE}} -m "v{{.CAL_VER_DATE}}"
       - git push --tags
