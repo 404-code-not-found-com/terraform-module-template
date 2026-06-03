@@ -27,9 +27,6 @@ I use a wide array of tools to make things easier for me.
 - [pre-commit](https://pre-commit.com/): Provides a method for running scripts
   and other tools during the `git commit` process.
   - `brew install pre-commit`
-- [trufflehog](https://github.com/trufflesecurity/trufflehog): Scans your git
-  repo for committed secrets 😱.
-  - `brew install trufflesecurity/trufflehog/trufflehog`
 - [autotag](https://github.com/pantheon-systems/autotag): Automatically creates
   git tags based on the commit message. Used to create semantic version tags in
   GitHub Actions pipeline. (Not installed locally, but you could)
@@ -44,12 +41,9 @@ commit process.
   Dynamically updates your README.md with information on the inputs, outputs,
   and requirements of your module.
   - `brew install terraform-docs`
-- [infracost](https://github.com/infracost/infracost): Gives you a cost estimate
-  for the cloud resources your module would deploy.
-  - `brew install infracost`
 - [jq](https://github.com/stedolan/jq): A lightweight and flexible command-line
   JSON processor. required for `terraform_validate` with
-  `--retry-once-with-cleanup` flag, and for `infracost_breakdown` hook.
+  `--retry-once-with-cleanup` flag.
   - `brew install jq`
 - [TFLint](https://github.com/terraform-linters/tflint): A Terraform linter that
   checks for best practices and errors in your Terraform code.
@@ -61,6 +55,8 @@ commit process.
     - `brew install terrascan`
   - [TFSec](https://tfsec.dev)
     - `brew install tfsec`
+  - [trivy](https://trivy.dev)
+    - `brew install trivy`
 
 ### Miscellaneous tools
 
@@ -178,7 +174,7 @@ be placed.
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | terraform | ~> 1.0 |
 
 ## Providers
