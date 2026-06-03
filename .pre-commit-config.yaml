@@ -3,16 +3,6 @@
 # See https://pre-commit.com/hooks.html for more hooks
 
 repos:
-  - repo: local
-    hooks:
-      - id: trufflehog
-        name: TruffleHog
-        description: Detect secrets in your data.
-        entry:
-          bash -c 'trufflehog git file://. --since-commit HEAD
-          --results=verified,unknown --fail'
-        language: system
-        stages: ["pre-commit", "pre-push"]
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
@@ -20,7 +10,7 @@ repos:
       - id: end-of-file-fixer
       - id: no-commit-to-branch
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.104.0
+    rev: v1.106.0
     hooks:
       - id: terraform_fmt
       - id: terraform_validate
@@ -32,9 +22,4 @@ repos:
       - id: terraform_tflint
         args:
           - --args=--config=__GIT_WORKING_DIR__/.tflint.hcl
-      - id: terraform_checkov
-      - id: infracost_breakdown
-        args:
-          - --args=--path=.
-          - --args=--terraform-var-file="terraform.tfvars"
-        # verbose: true
+      - id: terraform_trivy

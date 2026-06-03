@@ -20,15 +20,6 @@ tasks:
     cmds:
       - task --list-all
 
-  hog:
-    cmds:
-      - |
-        trufflehog git file://. \
-          --since-commit HEAD \
-          --only-verified \
-          --fail \
-          --no-update
-
   mr:
     desc: "Create Merge Request and Merge"
     cmds:
@@ -57,10 +48,6 @@ tasks:
       - gh pr create --fill-verbose
       - sleep 2
       - gh pr merge --delete-branch --merge
-
-  radar:
-    cmds:
-      - vault-radar scan git pre-commit
 
   tag:*:*:
     desc: "Create a signed tag with a message"
