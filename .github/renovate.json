@@ -5,6 +5,9 @@
   "assignees": ["methridge"],
   "prHourlyLimit": 10,
   "reviewers": ["methridge"],
+  "pre-commit": {
+    "enabled": true
+  },
   "packageRules": [
     {
       "matchPackagePrefixes": ["hashicorp/"],
