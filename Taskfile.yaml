@@ -1,97 +1,80 @@
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 # https://taskfile.dev
+#
+# Generic root Taskfile. This is the canonical copy served to every repo that
+# adopts methridge/taskfiles; it is identical across all consumers. Repos vendor
+# the shared task files into .taskfiles/shared/ and keep their own tasks in
+# .taskfiles/project/project.yml. Refresh with `task sync`; bootstrap a new repo
+# with the init.sh one-liner (see README.md).
 
 version: "3"
 
-vars:
-  CURRENT_DATE:
-    sh: date +"%Y-%m-%dT%H-%M-%S%Z"
-  CAL_VER_DATE:
-    sh: date -u +"%Y.%m%d.%H%M"
+includes:
+  git:
+    taskfile: .taskfiles/shared/git.yml
+    flatten: true
+  go:
+    taskfile: .taskfiles/shared/go.yml
+    flatten: true
+    optional: true
+  ansible:
+    taskfile: .taskfiles/shared/ansible.yml
+    flatten: true
+    optional: true
+  project:
+    taskfile: .taskfiles/project/project.yml
+    flatten: true
+    optional: true
 
 tasks:
   default:
     desc: Show available tasks
+    aliases: [help]
     cmds:
       - task --list-all
 
-  help:
-    desc: Show this help message
+  sync:
+    desc: Re-vendor the generic root + shared taskfiles from methridge/taskfiles
+    # TASKFILES_REF default = the release this file shipped with, so a bare
+    # `task sync` re-pulls the same version (idempotent, no surprise upgrades).
+    # It is stamped at release time (see the `release:*` task). Upgrade explicitly
+    # with TASKFILES_REF on the CLI or, durably, `export TASKFILES_REF` in .envrc.
+    vars:
+      TASKFILES_REF: '{{.TASKFILES_REF | default "v1.0.0"}}'
+      TASKFILES_FILES: '{{.TASKFILES_FILES | default "git.yml scripts/lib.sh scripts/merge.sh scripts/review.sh"}}'
+      BASE: 'https://raw.githubusercontent.com/methridge/taskfiles/{{.TASKFILES_REF}}'
     cmds:
-      - task --list-all
+      # Generic root — safe to overwrite; project tasks live in .taskfiles/project/.
+      - curl -fsSL "{{.BASE}}/Taskfile.yaml" -o Taskfile.yaml
+      - for: { var: TASKFILES_FILES, split: " " }
+        cmd: |
+          mkdir -p ".taskfiles/shared/$(dirname "{{.ITEM}}")"
+          curl -fsSL "{{.BASE}}/.taskfiles/shared/{{.ITEM}}" -o ".taskfiles/shared/{{.ITEM}}"
+          case "{{.ITEM}}" in *.sh) chmod +x ".taskfiles/shared/{{.ITEM}}" ;; esac
 
-  mr:
-    desc: "Create Merge Request and Merge"
-    cmds:
-      - glab mr create --fill --fill-commit-body --yes
-      - sleep 2
-      - glab mr merge -d
-
-  pre:
-    cmds:
-      - pre-commit autoupdate
-      - pre-commit gc
-      - pre-commit run -a
-
-  push:
+  sync:check:
+    desc: Report whether a newer methridge/taskfiles release is available
+    vars:
+      # Currently-vendored version = the sync default stamped into this file.
+      CURRENT:
+        sh: |
+          sed -nE 's/.*default "(v[0-9]+\.[0-9]+\.[0-9]+)".*/\1/p' Taskfile.yaml | head -1
+      # Newest release tag (same resolution as init.sh; no gh/jq needed).
+      LATEST:
+        sh: |
+          git ls-remote --tags --refs --sort=-v:refname \
+            https://github.com/methridge/taskfiles.git 'v*' 2>/dev/null \
+            | sed -n '1s#.*/##p' || true
     cmds:
       - |
-        if [[ $(git rev-parse --abbrev-ref HEAD) == "main" ]]; then
-          git switch --create {{.CURRENT_DATE}}
+        if [ -z "{{.LATEST}}" ]; then
+          echo "Could not reach methridge/taskfiles to check for releases." >&2
+          exit 1
         fi
-      - git add .
-      - git commit -m "{{.CURRENT_DATE}}"
-      - git push
-
-  pr:
-    cmds:
-      - gh pr create --fill-verbose
-      - sleep 2
-      - gh pr merge --delete-branch --merge
-
-  tag:*:*:
-    desc: "Create a signed tag with a message"
-    vars:
-      TAG_NAME: "{{index .MATCH 0}}"
-      TAG_MESSAGE: "{{index .MATCH 1}}"
-    cmds:
-      - git push
-      - git tag -s {{.TAG_NAME}} -m "{{.TAG_MESSAGE}}"
-      - git push --tags
-
-  tag:*:
-    desc: "Create a signed tag with tag as message"
-    vars:
-      TAG_NAME: "{{index .MATCH 0}}"
-    cmds:
-      - git push
-      - git tag -s {{.TAG_NAME}} -m "{{.TAG_NAME}}"
-      - git push --tags
-
-  tag0:
-    desc: "Create first tag on repo"
-    cmds:
-      - git push
-      - git tag -s v0.0.0 -m "v0.0.0 - First Tag 🤠"
-      - git push --tags
-
-  tagauto:
-    desc: "Create a signed tag with auto semantic versioning"
-    cmds:
-      - git push
-      - |
-        LAST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
-        if [[ -z "$LAST_TAG" ]]; then
-          git tag -s v0.0.0 -m "v0.0.0 - First Tag 🤠"
+        if [ "{{.CURRENT}}" = "{{.LATEST}}" ]; then
+          echo "Up to date: {{.CURRENT}} is the latest release."
         else
-          NEW_TAG="v$(autotag -vn --scheme=conventional)"
-          git tag -s "$NEW_TAG" -m "$NEW_TAG"
+          echo "Update available: {{.CURRENT}} -> {{.LATEST}}"
+          echo "  upgrade:  task sync TASKFILES_REF={{.LATEST}}"
+          echo "  or pin:   export TASKFILES_REF={{.LATEST}}   (in .envrc)"
         fi
-      - git push --tags
-
-  tagcal:
-    desc: "Create a signed tag with calendar versioning"
-    cmds:
-      - git push
-      - git tag -s v{{.CAL_VER_DATE}} -m "v{{.CAL_VER_DATE}}"
-      - git push --tags
