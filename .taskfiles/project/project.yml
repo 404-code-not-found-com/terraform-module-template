@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+# https://taskfile.dev
+#
+# Project-specific tasks (repo-owned; `task sync` never touches this file).
+
+version: "3"
+
+tasks: {}

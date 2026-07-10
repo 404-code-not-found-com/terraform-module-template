@@ -1,0 +1,116 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+# https://taskfile.dev
+#
+# From methridge/taskfiles (canonical). In consumer repos this is vendored into
+# .taskfiles/shared/ — do not hand-edit there; edit upstream and run 'task sync'.
+
+version: "3"
+
+vars:
+  CURRENT_DATE:
+    sh: date +"%Y-%m-%dT%H-%M-%S%Z"
+  CAL_VER_DATE:
+    sh: date -u +"%Y.%m%d.%H%M"
+
+tasks:
+  merge:
+    desc: "Create Merge or Pull Request and Merge"
+    aliases: [mr, pr]
+    preconditions:
+      - sh: 'command -v gh >/dev/null 2>&1 || command -v glab >/dev/null 2>&1'
+        msg: "gh (GitHub) or glab (GitLab) CLI required: brew install gh glab"
+    cmds:
+      - .taskfiles/shared/scripts/merge.sh
+
+  pre:
+    desc: "Update and run pre-commit hooks against all files"
+    preconditions:
+      - sh: 'command -v pre-commit >/dev/null 2>&1'
+        msg: "pre-commit required: brew install pre-commit"
+    cmds:
+      - pre-commit autoupdate
+      - pre-commit gc
+      - pre-commit run -a
+
+  push:
+    desc: "Commit all changes and push (branching off main if needed)"
+    cmds:
+      - |
+        if [[ $(git rev-parse --abbrev-ref HEAD) == "main" ]]; then
+          git switch --create {{.CURRENT_DATE}}
+        fi
+      - git add .
+      - git commit -m "{{.CURRENT_DATE}}"
+      - git push
+
+  review:*:
+    desc: "Review, approve, and merge a GitHub PR by number (review:<PR#>)"
+    preconditions:
+      - sh: 'command -v gh >/dev/null 2>&1'
+        msg: "gh (GitHub CLI) required: brew install gh"
+    cmds:
+      - .taskfiles/shared/scripts/review.sh {{index .MATCH 0}}
+
+  tag:*:*:
+    desc: "Create a signed tag with a message"
+    vars:
+      TAG_NAME: "{{index .MATCH 0}}"
+      TAG_MESSAGE: "{{index .MATCH 1}}"
+    preconditions:
+      - sh: 'git config --get user.signingkey >/dev/null 2>&1'
+        msg: "git signing key not configured (git tag -s): set user.signingkey"
+    cmds:
+      - git push
+      - git tag -s {{.TAG_NAME}} -m "{{.TAG_MESSAGE}}"
+      - git push --tags
+
+  tag:*:
+    desc: "Create a signed tag with tag as message"
+    vars:
+      TAG_NAME: "{{index .MATCH 0}}"
+    preconditions:
+      - sh: 'git config --get user.signingkey >/dev/null 2>&1'
+        msg: "git signing key not configured (git tag -s): set user.signingkey"
+    cmds:
+      - git push
+      - git tag -s {{.TAG_NAME}} -m "{{.TAG_NAME}}"
+      - git push --tags
+
+  tag0:
+    desc: "Create first tag on repo"
+    preconditions:
+      - sh: 'git config --get user.signingkey >/dev/null 2>&1'
+        msg: "git signing key not configured (git tag -s): set user.signingkey"
+    cmds:
+      - git push
+      - git tag -s v0.0.0 -m "v0.0.0 - First Tag 🤠"
+      - git push --tags
+
+  tagauto:
+    desc: "Create a signed tag with auto semantic versioning"
+    preconditions:
+      - sh: 'command -v autotag >/dev/null 2>&1'
+        msg: "autotag required: https://github.com/pantheon-systems/autotag"
+      - sh: 'git config --get user.signingkey >/dev/null 2>&1'
+        msg: "git signing key not configured (git tag -s): set user.signingkey"
+    cmds:
+      - git push
+      - |
+        LAST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+        if [[ -z "$LAST_TAG" ]]; then
+          git tag -s v0.0.0 -m "v0.0.0 - First Tag 🤠"
+        else
+          NEW_TAG="v$(autotag -vn --scheme=conventional)"
+          git tag -s "$NEW_TAG" -m "$NEW_TAG"
+        fi
+      - git push --tags
+
+  tagcal:
+    desc: "Create a signed tag with calendar versioning"
+    preconditions:
+      - sh: 'git config --get user.signingkey >/dev/null 2>&1'
+        msg: "git signing key not configured (git tag -s): set user.signingkey"
+    cmds:
+      - git push
+      - git tag -s v{{.CAL_VER_DATE}} -m "v{{.CAL_VER_DATE}}"
+      - git push --tags
