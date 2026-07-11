@@ -15,15 +15,16 @@ default_branch() {
 # merge commit and delete the branch. Works whether or not the repo has the
 # auto-merge feature enabled, because it blocks locally until checks pass.
 #
-# gh pr checks exit codes: 0 = all passed, 8 = no checks reported,
-# anything else = a check failed or is still pending after the watch ended.
+# gh pr checks exit codes: 0 = all passed, 8 = checks still pending when the
+# watch ended, 1 = a check failed OR the branch has no checks at all. Exit 1 is
+# ambiguous, so we distinguish "no checks" by gh's "no checks reported" message
+# rather than by exit code and treat that as success (nothing to wait on).
 github_merge_current_pr() {
   echo "Waiting for required checks to pass..."
-  local rc=0
-  gh pr checks --watch --required --fail-fast --interval 10 || rc=$?
-  if [[ $rc -eq 8 ]]; then
-    echo "No required checks reported; proceeding to merge."
-  elif [[ $rc -ne 0 ]]; then
+  local rc=0 output
+  output="$(gh pr checks --watch --required --fail-fast --interval 10 2>&1)" || rc=$?
+  printf '%s\n' "$output"
+  if [[ $rc -ne 0 && $output != *"no checks reported"* ]]; then
     echo "Required checks did not pass (exit ${rc}). Aborting merge." >&2
     return 1
   fi

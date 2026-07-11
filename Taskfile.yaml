@@ -40,7 +40,7 @@ tasks:
     # It is stamped at release time (see the `release:*` task). Upgrade explicitly
     # with TASKFILES_REF on the CLI or, durably, `export TASKFILES_REF` in .envrc.
     vars:
-      TASKFILES_REF: '{{.TASKFILES_REF | default "v1.0.0"}}'
+      TASKFILES_REF: '{{.TASKFILES_REF | default "v1.0.1"}}'
       TASKFILES_FILES: '{{.TASKFILES_FILES | default "git.yml scripts/lib.sh scripts/merge.sh scripts/review.sh"}}'
       BASE: 'https://raw.githubusercontent.com/methridge/taskfiles/{{.TASKFILES_REF}}'
     cmds:
