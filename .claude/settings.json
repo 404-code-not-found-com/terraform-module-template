@@ -1,0 +1,10 @@
+{
+  "extraKnownMarketplaces": {
+    "hashicorp": {
+      "source": { "source": "github", "repo": "hashicorp/agent-skills" }
+    }
+  },
+  "enabledPlugins": {
+    "terraform@hashicorp": true
+  }
+}

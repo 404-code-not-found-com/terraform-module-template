@@ -1,0 +1,3 @@
+# Committed methridge/taskfiles config for this repo (see STANDARD.md).
+# Loaded by the root Taskfile's `dotenv:` directive.
+TASKFILES_CLAUDE_PROFILE="terraform"
