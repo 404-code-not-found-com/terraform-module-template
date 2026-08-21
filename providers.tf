@@ -9,8 +9,8 @@
 # terraform {
 #   required_providers {
 #     google = {
-#       source = "hashicorp/google"
-#       version = "6.28.0"
+#       source  = "hashicorp/google"
+#       version = "~> 6.28"
 #     }
 #   }
 # }
@@ -24,7 +24,7 @@
 #   required_providers {
 #     hcp = {
 #       source  = "hashicorp/hcp"
-#       version = "0.104.0"
+#       version = "~> 0.104"
 #     }
 #   }
 # }
