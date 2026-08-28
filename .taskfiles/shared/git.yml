@@ -33,14 +33,23 @@ tasks:
       - pre-commit run -a
 
   push:
-    desc: "Commit all changes and push (branching off main if needed)"
+    desc: "Commit changes and push (branching off main if needed, staging only tracked changes by default)"
+    vars:
+      MESSAGE: '{{.MESSAGE | default (printf "chore: %s" .CURRENT_DATE)}}'
+      BRANCH: '{{.BRANCH | default ""}}'
+      FILES: '{{.FILES | default "."}}'
+      ALLOW_UNTRACKED: '{{.ALLOW_UNTRACKED | default "false"}}'
+    preconditions:
+      - sh: "echo '{{.MESSAGE}}' | grep -qE '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\\([a-zA-Z0-9_.-]+\\))?!?: .+'"
+        msg: |
+          Commit message must be a Conventional Commit: <type>(<scope>)?!: <description>
+          Allowed types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
+          Example: fix(auth): handle expiry
+          Got: '{{.MESSAGE}}'
     cmds:
       - |
-        if [[ $(git rev-parse --abbrev-ref HEAD) == "main" ]]; then
-          git switch --create {{.CURRENT_DATE}}
-        fi
-      - git add .
-      - git commit -m "{{.CURRENT_DATE}}"
+        MESSAGE="{{.MESSAGE}}" BRANCH="{{.BRANCH}}" CURRENT_DATE="{{.CURRENT_DATE}}" FILES="{{.FILES}}" ALLOW_UNTRACKED="{{.ALLOW_UNTRACKED}}" .taskfiles/shared/scripts/push.sh
+      - git commit -m "{{.MESSAGE}}"
       - git push
 
   review:*:
