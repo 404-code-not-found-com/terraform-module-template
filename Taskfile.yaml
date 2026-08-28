@@ -47,7 +47,7 @@ tasks:
     # It is stamped at release time (see the `release:*` task). Upgrade explicitly
     # with TASKFILES_REF on the CLI or, durably, `export TASKFILES_REF` in .envrc.
     vars:
-      TASKFILES_REF: '{{.TASKFILES_REF | default "v1.6.4"}}'
+      TASKFILES_REF: '{{.TASKFILES_REF | default "v1.6.5"}}'
       TASKFILES_FILES: '{{.TASKFILES_FILES | default "git.yml scripts/lib.sh scripts/merge.sh scripts/push.sh scripts/review.sh"}}'
       # Claude Code plugin profile for this repo (claude/<name>.json upstream).
       # Resolution order, high to low: a CLI arg (TASKFILES_CLAUDE_PROFILE=...)
@@ -59,12 +59,37 @@ tasks:
       TASKFILES_BASE: '{{.TASKFILES_BASE | default (print "https://raw.githubusercontent.com/methridge/taskfiles/" .TASKFILES_REF)}}'
     cmds:
       # Generic root — safe to overwrite; project tasks live in .taskfiles/project/.
-      - curl -fsSL "{{.TASKFILES_BASE}}/Taskfile.yaml" -o Taskfile.yaml
-      - for: { var: TASKFILES_FILES, split: " " }
-        cmd: |
-          mkdir -p ".taskfiles/shared/$(dirname "{{.ITEM}}")"
-          curl -fsSL "{{.TASKFILES_BASE}}/.taskfiles/shared/{{.ITEM}}" -o ".taskfiles/shared/{{.ITEM}}"
-          case "{{.ITEM}}" in *.sh) chmod +x ".taskfiles/shared/{{.ITEM}}" ;; esac
+      #
+      # The shared-file list has to come from the Taskfile.yaml being fetched,
+      # not the one already on disk. Task resolved TASKFILES_FILES above
+      # against the local file, and the first thing this block does is
+      # overwrite it - so a release that ADDS a shared script used to fetch the
+      # new git.yml that calls it while never downloading the script itself,
+      # leaving every consumer a task short until someone ran `task sync` a
+      # second time (the v1.6.4 rollout hit this fleet-wide). Reading the list
+      # back out of the file just written closes that gap in a single pass.
+      #
+      # An explicit TASKFILES_FILES still wins: what the old file shipped is
+      # captured before the overwrite, so a resolved value differing from it
+      # can only have come from a CLI arg, .taskfiles/config, or the
+      # environment. Same detection idiom as the claude profile block below.
+      # Keep this block code-only - Task echoes it verbatim to stderr.
+      - |
+        set -e
+        shipped="$(sed -nE 's/.*TASKFILES_FILES \| default "([^"]*)".*/\1/p' Taskfile.yaml | head -1)"
+        curl -fsSL "{{.TASKFILES_BASE}}/Taskfile.yaml" -o Taskfile.yaml
+        files="{{.TASKFILES_FILES}}"
+        if [ "$files" = "$shipped" ]; then
+          fetched="$(sed -nE 's/.*TASKFILES_FILES \| default "([^"]*)".*/\1/p' Taskfile.yaml | head -1)"
+          if [ -n "$fetched" ]; then
+            files="$fetched"
+          fi
+        fi
+        for item in $files; do
+          mkdir -p ".taskfiles/shared/$(dirname "$item")"
+          curl -fsSL "{{.TASKFILES_BASE}}/.taskfiles/shared/${item}" -o ".taskfiles/shared/${item}"
+          case "$item" in *.sh) chmod +x ".taskfiles/shared/${item}" ;; esac
+        done
       # Warn (without changing behaviour) when profile came from a CLI arg
       # rather than the committed .taskfiles/config, so a one-off override
       # never masquerades as a durable choice. Detecting the source
@@ -131,7 +156,7 @@ tasks:
       PROFILE: "{{index .MATCH 0}}"
       # Same resolution as `sync` above - kept in lockstep by `task release`,
       # which stamps every `default "vX.Y.Z"` in this file together.
-      TASKFILES_REF: '{{.TASKFILES_REF | default "v1.6.4"}}'
+      TASKFILES_REF: '{{.TASKFILES_REF | default "v1.6.5"}}'
       TASKFILES_BASE: '{{.TASKFILES_BASE | default (print "https://raw.githubusercontent.com/methridge/taskfiles/" .TASKFILES_REF)}}'
     cmds:
       # Validate the name resolves upstream before writing anything - a
